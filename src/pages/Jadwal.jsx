@@ -87,7 +87,7 @@ const Jadwal = () => {
             {/* Detail Headers */}
             <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800/60 pb-5">
                 <div>
-                    <h2 className="text-2xl font-black text-zinc-800 dark:text-zinc-150">
+                    <h2 className="text-2xl font-black text-zinc-800 dark:text-white">
                         {t('fullSchedule')}
                     </h2>
                     <p className="text-sm text-zinc-500 dark:text-zinc-450 mt-1 flex items-center gap-1.5 font-medium">
@@ -133,7 +133,7 @@ const Jadwal = () => {
                                             {t('activeBadge')}
                                         </span>
                                     )}
-                                    <h3 className={`text-lg font-extrabold ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-700 dark:text-zinc-350'}`}>
+                                    <h3 className={`text-lg font-extrabold ${isActive ? 'text-emerald-600 dark:text-white' : 'text-zinc-700 dark:text-zinc-100'}`}>
                                         {name}
                                     </h3>
                                 </div>
@@ -143,7 +143,7 @@ const Jadwal = () => {
                             </div>
 
                             <div className="mt-8 flex justify-between items-baseline">
-                                <time className="text-3xl font-black text-zinc-805 dark:text-zinc-150 font-display">
+                                <time className="text-3xl font-black text-zinc-800 dark:text-white font-display">
                                     {time}
                                 </time>
                                 {isActive && (
