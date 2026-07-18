@@ -8,15 +8,34 @@
 
   --color-emerald-50: #eff6ff;
   --color-emerald-100: #dbeafe;
+  --color-emerald-105: #dbeafe;
+  --color-emerald-200: #bfdbfe;
+  --color-emerald-250: #93c5fd;
+  --color-emerald-300: #93c5fd;
+  --color-emerald-400: #60a5fa;
+  --color-emerald-450: #3b82f6;
   --color-emerald-500: #3b82f6;
+  --color-emerald-505: #2563eb;
   --color-emerald-600: #2563eb;
+  --color-emerald-650: #1d4ed8;
   --color-emerald-700: #1d4ed8;
+  --color-emerald-800: #1e40af;
+  --color-emerald-850: #1e40af;
+  --color-emerald-900: #1e3a8a;
   --color-emerald-950: #172554;
 
+  --color-teal-50: #f0f9ff;
+  --color-teal-100: #e0f2fe;
+  --color-teal-200: #bae6fd;
   --color-teal-300: #7dd3fc;
   --color-teal-400: #38bdf8;
   --color-teal-500: #0ea5e9;
   --color-teal-600: #0284c7;
+  --color-teal-700: #0369a1;
+  --color-teal-705: #0369a1;
+  --color-teal-800: #075985;
+  --color-teal-900: #0c4a6e;
+  --color-teal-950: #082f49;
 
   --animate-spin-slow: spin 8s linear infinite;
 }
