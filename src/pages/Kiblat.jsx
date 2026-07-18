@@ -6,6 +6,16 @@ import { IoCompassOutline, IoLocationOutline, IoNavigateCircle, IoRefreshOutline
 
 const Kiblat = () => {
     const { coords, t, language } = useSettings()
+
+    const [compassSensorEnabled, setCompassSensorEnabled] = useState(() => {
+        const saved = localStorage.getItem('compassSensorEnabled')
+        return saved === null ? true : saved === 'true'
+    })
+
+    useEffect(() => {
+        localStorage.setItem('compassSensorEnabled', compassSensorEnabled.toString())
+    }, [compassSensorEnabled])
+
     const {
         heading,
         accuracy,
@@ -13,7 +23,7 @@ const Kiblat = () => {
         permissionGranted,
         requestPermission,
         isiOS
-    } = useDeviceOrientation()
+    } = useDeviceOrientation(compassSensorEnabled)
 
     const [qiblaDirection, setQiblaDirection] = useState(0)
     const [distance, setDistance] = useState(0)
@@ -29,13 +39,14 @@ const Kiblat = () => {
         }
     }, [coords])
 
-    // Get active heading (sensor heading if supported & granted, else manual desktop fallback)
-    const activeHeading = isSupported && permissionGranted ? heading : manualHeading
+    // Get active heading (sensor heading if supported & granted & enabled, else manual fallback)
+    const activeHeading = isSupported && permissionGranted && compassSensorEnabled ? heading : manualHeading
 
     // Qibla needle rotation (relative to phone top pointer): (QiblaDeg - heading)
     const qiblaRelativeAngle = (qiblaDirection - activeHeading + 360) % 360
 
     const getAccuracyLabel = (acc) => {
+        if (!compassSensorEnabled) return language === 'en' ? 'Manual Mode' : 'Mode Manual'
         if (acc === null) return t('tidakTerdeteksi')
         if (acc <= 10) return t('highAccuracy')
         if (acc <= 30) return t('normalAccuracy')
@@ -43,6 +54,7 @@ const Kiblat = () => {
     }
 
     const getAccuracyColor = (acc) => {
+        if (!compassSensorEnabled) return 'text-zinc-500 dark:text-zinc-400 font-semibold'
         if (acc === null) return 'text-zinc-400 dark:text-zinc-500'
         if (acc <= 10) return 'text-emerald-500 font-semibold'
         if (acc <= 30) return 'text-amber-500 font-semibold'
@@ -76,8 +88,36 @@ const Kiblat = () => {
                 {/* Compass Dial Card */}
                 <div className="md:col-span-2 glass-card rounded-3xl p-6 md:p-8 flex flex-col items-center justify-center border border-zinc-200/50 dark:border-zinc-800/40 shadow-lg bg-white/70 dark:bg-zinc-900/50">
 
+                    {/* Compass Sensor Toggle */}
+                    <div className="w-full flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-800/40 pb-4 mb-6">
+                        <div className="flex items-center gap-3">
+                            <div className={`p-2 rounded-xl transition-colors ${compassSensorEnabled ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'bg-zinc-100 dark:bg-zinc-800'}`}>
+                                <IoCompassOutline className={`w-5 h-5 transition-colors ${compassSensorEnabled ? 'text-emerald-500 animate-spin-slow' : 'text-zinc-400 dark:text-zinc-550'}`} />
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-bold text-zinc-850 dark:text-zinc-150">
+                                    {language === 'en' ? 'Compass Sensor' : 'Sensor Kompas'}
+                                </h4>
+                                <p className="text-[11px] text-zinc-450 dark:text-zinc-500 leading-tight mt-0.5">
+                                    {compassSensorEnabled
+                                        ? (language === 'en' ? 'Tracking real-time heading' : 'Arah dipantau real-time')
+                                        : (language === 'en' ? 'Sensor offline (using manual mode)' : 'Sensor mati (mode manual aktif)')
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => setCompassSensorEnabled(!compassSensorEnabled)}
+                            className={`relative inline-flex h-6.5 w-12 items-center rounded-full transition-colors duration-300 focus:outline-none ${compassSensorEnabled ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'}`}
+                        >
+                            <span
+                                className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform duration-300 ${compassSensorEnabled ? 'translate-x-6' : 'translate-x-1'}`}
+                            />
+                        </button>
+                    </div>
+
                     {/* Geolocation/Sensor Requests for iOS */}
-                    {isiOS && !permissionGranted && (
+                    {compassSensorEnabled && isiOS && !permissionGranted && (
                         <div className="text-center mb-6 max-w-sm">
                             <IoWarningOutline className="w-10 h-10 text-amber-500 mx-auto mb-3" />
                             <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200 mb-1.5">{t('sensorCompassIos')}</h3>
@@ -94,7 +134,7 @@ const Kiblat = () => {
                     )}
 
                     {/* DeviceOrientation unsupported Notification fallback */}
-                    {!isSupported && (
+                    {!isSupported && compassSensorEnabled && (
                         <div className="mb-6 w-full max-w-sm bg-amber-500/10 border border-amber-500/25 rounded-2xl p-4 flex gap-3 text-amber-600 dark:text-amber-400">
                             <IoWarningOutline className="w-5 h-5 shrink-0" />
                             <div className="text-xs font-medium">
@@ -161,8 +201,8 @@ const Kiblat = () => {
                         )}
                     </div>
 
-                    {/* Manual test slider (if compass API unsupported or desktop testing) */}
-                    {!isSupported && (
+                    {/* Manual test slider (if compass API unsupported, desktop testing, or disabled by user) */}
+                    {(!isSupported || !compassSensorEnabled) && (
                         <div className="w-full max-w-sm mt-8 space-y-2 border-t border-zinc-200/50 dark:border-zinc-850/40 pt-4">
                             <div className="flex justify-between text-[11px] font-semibold text-zinc-400 dark:text-zinc-550 uppercase">
                                 <span>{t('simHeadingHeading')}</span>

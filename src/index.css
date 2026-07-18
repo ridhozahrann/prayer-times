@@ -6,12 +6,19 @@
   --font-sans: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif;
   --font-display: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
 
-  --color-emerald-50: #ecfdf5;
-  --color-emerald-100: #d1fae5;
-  --color-emerald-500: #10b981;
-  --color-emerald-600: #059669;
-  --color-emerald-700: #047857;
-  --color-emerald-950: #022c22;
+  --color-emerald-50: #eff6ff;
+  --color-emerald-100: #dbeafe;
+  --color-emerald-500: #3b82f6;
+  --color-emerald-600: #2563eb;
+  --color-emerald-700: #1d4ed8;
+  --color-emerald-950: #172554;
+
+  --color-teal-300: #7dd3fc;
+  --color-teal-400: #38bdf8;
+  --color-teal-500: #0ea5e9;
+  --color-teal-600: #0284c7;
+
+  --animate-spin-slow: spin 8s linear infinite;
 }
 
 @utility glass-card {

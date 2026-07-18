@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export const useDeviceOrientation = () => {
+export const useDeviceOrientation = (enabled = true) => {
     const [heading, setHeading] = useState(0)
     const [accuracy, setAccuracy] = useState(null)
     const [isSupported, setIsSupported] = useState(true)
@@ -54,7 +54,7 @@ export const useDeviceOrientation = () => {
     }
 
     useEffect(() => {
-        if (!permissionGranted) return
+        if (!permissionGranted || !enabled) return
 
         const handleOrientation = (event) => {
             // absolute heading is alpha on deviceorientationabsolute, or webkitCompassHeading
@@ -90,7 +90,7 @@ export const useDeviceOrientation = () => {
         } else {
             setIsSupported(false)
         }
-    }, [permissionGranted])
+    }, [permissionGranted, enabled])
 
     return {
         heading,
