@@ -1,0 +1,25 @@
+{
+    "name": "Prayer Times - Shalat & Qibla Compass",
+    "short_name": "Prayer Times",
+    "description": "A premium, fast, and responsive PWA for accurate Muslim prayer times and Qibla compass direction. Works offline.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#09090b",
+    "theme_color": "#10b981",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "icons": [
+        {
+            "src": "/icons/logo.svg",
+            "type": "image/svg+xml",
+            "sizes": "192x192 512x512",
+            "purpose": "any"
+        },
+        {
+            "src": "/favicon.svg",
+            "type": "image/svg+xml",
+            "sizes": "any",
+            "purpose": "maskable"
+        }
+    ]
+}

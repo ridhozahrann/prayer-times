@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" rx="128" fill="url(#bg-grad)"/>
+  
+  <!-- Moon & Crescent -->
+  <path d="M 285.3 147.2 C 263.2 135.5 235.3 141.2 220 160.8 C 204.6 180.4 205.1 209.2 221.2 228.3 C 218.4 220.2 219.7 211.2 224.8 204.2 C 230 197.3 238.3 193.3 247 193.3 C 248.8 193.3 250.7 193.5 252.5 194 C 242.9 181.7 243.6 163.9 254.3 152.4 C 265 140.9 281.8 138.8 294.8 147.1 L 285.3 147.2" fill="#FFE082"/>
+  <polygon points="280,180 285,195 300,195 288,205 292,220 280,210 268,220 272,205 260,195 275,195" fill="#FFE082"/>
+  
+  <!-- Dome -->
+  <path d="M 180 370 L 332 370 L 332 320 Q 332 240 256 240 Q 180 240 180 320 Z" fill="#ffffff" />
+  <rect x="160" y="370" width="192" height="15" rx="5" fill="#ffffff" />
+  <path d="M 256 210 L 256 240" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+  <circle cx="256" cy="205" r="4" fill="#ffffff" />
+</svg>
