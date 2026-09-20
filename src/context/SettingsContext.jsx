@@ -98,6 +98,13 @@ const TRANSLATIONS = {
         cobaLagiBtn: 'Coba Lagi',
         errorTitle: 'Terjadi Kesalahan',
         loadingText: 'Memuat Jadwal...',
+        waktuAdzanTiba: 'Waktu Adzan Tiba',
+        tidakTerdeteksi: 'Tidak Terdeteksi',
+        arahPerangkat: 'Arah Perangkat',
+        headingSaatIni: 'Heading Saat Ini',
+        jarakKeKaabah: 'Jarak ke Ka\'bah',
+        garisHaversine: 'Garis Lurus Haversine',
+        akurasiKompas: 'Akurasi Kompas',
         methodsTitle: {
             '20': 'Kementerian Agama RI',
             '3': 'Muslim World League',
@@ -192,6 +199,13 @@ const TRANSLATIONS = {
         cobaLagiBtn: 'Try Again',
         errorTitle: 'An Error Occurred',
         loadingText: 'Loading Schedules...',
+        waktuAdzanTiba: 'Prayer Time Arrived',
+        tidakTerdeteksi: 'Not Detected',
+        arahPerangkat: 'Device Heading',
+        headingSaatIni: 'Current Heading',
+        jarakKeKaabah: 'Distance to Kaaba',
+        garisHaversine: 'Haversine Direct Line',
+        akurasiKompas: 'Compass Accuracy',
         methodsTitle: {
             '20': 'Ministry of Religious Affairs ID',
             '3': 'Muslim World League',
@@ -338,7 +352,7 @@ export const SettingsProvider = ({ children }) => {
                 }
             }
         }
-    }, [useGPS, manualProvince, manualCity, language])
+    }, [useGPS, manualProvince, manualCity])
 
     return (
         <SettingsContext.Provider

@@ -304,7 +304,7 @@ const Jadwal = () => {
                                         {monthlyData.map((dayItem, idx) => {
                                             const dayNum = parseInt(dayItem.date.gregorian.day, 10)
                                             const isToday = dayNum === todayDate && selectedMonth === todayMonth && selectedYear === todayYear
-                                            const t = dayItem.timings
+                                            const itemTimings = dayItem.timings
 
                                             const clean = (str) => str ? str.split(' ')[0] : '--:--'
 
@@ -324,12 +324,12 @@ const Jadwal = () => {
                                                             </span>
                                                         )}
                                                     </td>
-                                                    <td className="p-3.5 whitespace-nowrap font-mono">{clean(t.Fajr)}</td>
-                                                    <td className="p-3.5 whitespace-nowrap font-mono text-zinc-400 dark:text-zinc-500">{clean(t.Sunrise)}</td>
-                                                    <td className="p-3.5 whitespace-nowrap font-mono">{clean(t.Dhuhr)}</td>
-                                                    <td className="p-3.5 whitespace-nowrap font-mono">{clean(t.Asr)}</td>
-                                                    <td className="p-3.5 whitespace-nowrap font-mono">{clean(t.Maghrib)}</td>
-                                                    <td className="p-3.5 pr-5 whitespace-nowrap font-mono">{clean(t.Isha)}</td>
+                                                    <td className="p-3.5 whitespace-nowrap font-mono">{clean(itemTimings?.Fajr)}</td>
+                                                    <td className="p-3.5 whitespace-nowrap font-mono text-zinc-400 dark:text-zinc-500">{clean(itemTimings?.Sunrise)}</td>
+                                                    <td className="p-3.5 whitespace-nowrap font-mono">{clean(itemTimings?.Dhuhr)}</td>
+                                                    <td className="p-3.5 whitespace-nowrap font-mono">{clean(itemTimings?.Asr)}</td>
+                                                    <td className="p-3.5 whitespace-nowrap font-mono">{clean(itemTimings?.Maghrib)}</td>
+                                                    <td className="p-3.5 pr-5 whitespace-nowrap font-mono">{clean(itemTimings?.Isha)}</td>
                                                 </tr>
                                             )
                                         })}

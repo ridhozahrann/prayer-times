@@ -76,36 +76,13 @@ export const PrayerProvider = ({ children }) => {
 
                     // Hijri Date
                     const hijriObj = data.date.hijri
-                    const hijriStr = `${hijriObj.day} ${hijriObj.month.en} ${hijriObj.year} H`
-                    // Translate English month names to Indonesian standard if preferred
-                    const monthsMap = {
-                        'Muharram': 'Muharram',
-                        'Safar': 'Safar',
-                        'Rabīʿ al-awwal': 'Rabiul Awal',
-                        'Rabīʿ ath-thānī': 'Rabiul Akhir',
-                        'Jumādā al-ūlā': 'Jumadil Awal',
-                        'Jumādā al-ākhirah': 'Jumadil Akhir',
-                        'Rajab': 'Rajab',
-                        'Shaʿbān': 'Sya\'ban',
-                        'Ramaḍān': 'Ramadhan',
-                        'Shawwāl': 'Syawal',
-                        'Dhū al-Qaʿdah': 'Zulqa\'dah',
-                        'Dhū al-Ḥijjah': 'Zulhijjah',
-                        // Simple string matching fallback
-                        'Rabī\' al-awwal': 'Rabiul Awal',
-                        'Rabī\' ath-thānī': 'Rabiul Akhir',
-                        'Jumādā al-awwal': 'Jumadil Awal',
-                        'Jumādā ath-thāniya': 'Jumadil Akhir',
-                        'Sha\'bān': 'Sya\'ban',
-                        'Dhū l-Qa\'da': 'Zulqa\'dah',
-                        'Dhū l-Ḥijja': 'Zulhijjah'
-                    }
-                    let customHijriMonth = hijriObj.month.en
-                    Object.keys(monthsMap).forEach(key => {
-                        if (hijriObj.month.en.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(hijriObj.month.en.toLowerCase())) {
-                            customHijriMonth = monthsMap[key]
-                        }
-                    })
+                    const hijriMonthsNames = [
+                        'Muharram', 'Safar', 'Rabiul Awal', 'Rabiul Akhir',
+                        'Jumadil Awal', 'Jumadil Akhir', 'Rajab', 'Sya\'ban',
+                        'Ramadhan', 'Syawal', 'Zulqa\'dah', 'Zulhijjah'
+                    ]
+                    const monthIndex = hijriObj.month?.number ? hijriObj.month.number - 1 : 0
+                    const customHijriMonth = hijriMonthsNames[monthIndex] || hijriObj.month?.en || ''
                     setHijriDate(`${hijriObj.day} ${customHijriMonth} ${hijriObj.year} H`)
                 }
             } catch (err) {
@@ -183,9 +160,6 @@ export const PrayerProvider = ({ children }) => {
             setActiveRemaining(timeRemaining)
 
             // 4. Trigger browser notification.
-            // We check if the next prayer time has just arrived (countdown == 0).
-            // Or to avoid missing it, we trigger when countdown is between 0 and 1 seconds.
-            // Only do this for actual prayers (exclude Sunrise from notification alerts unless requested, but let's notify for actual prayers: Fajr, Dhuhr, Asr, Maghrib, Isha).
             if (timeRemaining <= 1 && nextSlot.key !== 'Sunrise' && notificationsEnabled) {
                 const getPrayerName = (key) => {
                     const mapping = {
@@ -218,7 +192,7 @@ export const PrayerProvider = ({ children }) => {
                 }
             }
         }
-    }, [timings, currentTime, notificationsEnabled, coords.name])
+    }, [timings, currentTime, notificationsEnabled, coords.isGPS, coords.name, language, t])
 
     return (
         <PrayerContext.Provider

@@ -70,7 +70,19 @@ export const formatGregorianDate = (date) => {
  * Fallback Hijri date calculator if the API fails or is loading.
  * This is an approximation (Kuwaiti Algorithm variant).
  */
-export const getOfflineHijriDate = (date) => {
+export const getOfflineHijriDate = (date = new Date()) => {
+    try {
+        if (typeof Intl !== 'undefined' && Intl.DateTimeFormat) {
+            return new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }).format(date) + ' H'
+        }
+    } catch (e) {
+        // Fallback algorithm below
+    }
+
     let jd = 0
     let year = date.getFullYear()
     let month = date.getMonth() + 1

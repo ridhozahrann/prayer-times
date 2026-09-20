@@ -4,7 +4,7 @@ import { IoHome, IoHomeOutline, IoTime, IoTimeOutline, IoCompass, IoCompassOutli
 import { useSettings } from '../context/SettingsContext'
 
 const BottomNav = () => {
-    const { t, language } = useSettings()
+    const { t } = useSettings()
 
     const navItems = [
         {
@@ -15,19 +15,19 @@ const BottomNav = () => {
         },
         {
             to: '/jadwal',
-            label: language === 'en' ? 'Times' : 'Jadwal',
+            label: t('jadwal'),
             iconActive: <IoTime className="w-5 h-5" />,
             iconInactive: <IoTimeOutline className="w-5 h-5" />
         },
         {
             to: '/kiblat',
-            label: language === 'en' ? 'Qibla' : 'Kiblat',
+            label: t('kiblat'),
             iconActive: <IoCompass className="w-5 h-5" />,
             iconInactive: <IoCompassOutline className="w-5 h-5" />
         },
         {
             to: '/settings',
-            label: language === 'en' ? 'Settings' : 'Atur',
+            label: t('settings'),
             iconActive: <IoSettings className="w-5 h-5" />,
             iconInactive: <IoSettingsOutline className="w-5 h-5" />
         }
