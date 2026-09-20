@@ -34,6 +34,13 @@ const TRANSLATIONS = {
         ongoing: 'Sedang Berlangsung',
         dailyCalendar: 'Kalender Harian',
         fullSchedule: 'Seluruh Jadwal Sholat',
+        dailyView: 'Harian',
+        monthlyView: 'Bulanan',
+        monthlySchedule: 'Jadwal Sholat Bulanan',
+        selectMonth: 'Pilih Bulan',
+        prevMonth: 'Bulan Sebelumnya',
+        nextMonth: 'Bulan Berikutnya',
+        dateHeader: 'Tanggal',
         compassBearing: 'Sudut Kiblat',
         compassFromNorth: 'Dari Arah Utara',
         distanceToKaaba: 'Jarak ke Ka\'bah',
@@ -121,6 +128,13 @@ const TRANSLATIONS = {
         ongoing: 'Ongoing',
         dailyCalendar: 'Daily Calendar',
         fullSchedule: 'All Prayer Times',
+        dailyView: 'Daily',
+        monthlyView: 'Monthly',
+        monthlySchedule: 'Monthly Prayer Schedule',
+        selectMonth: 'Select Month',
+        prevMonth: 'Previous Month',
+        nextMonth: 'Next Month',
+        dateHeader: 'Date',
         compassBearing: 'Qibla Angle',
         compassFromNorth: 'From North Direction',
         distanceToKaaba: 'Distance to Kaaba',
@@ -282,7 +296,8 @@ export const SettingsProvider = ({ children }) => {
                 setCoords({
                     lat: latitude,
                     lng: longitude,
-                    name: language === 'id' ? 'Lokasi Anda (GPS)' : 'Your Location (GPS)'
+                    name: 'Lokasi Anda (GPS)',
+                    isGPS: true
                 })
                 setGpsLoading(false)
             },
@@ -317,7 +332,8 @@ export const SettingsProvider = ({ children }) => {
                     setCoords({
                         lat: cityObj.lat,
                         lng: cityObj.lng,
-                        name: `${cityObj.name}, ${manualProvince}`
+                        name: `${cityObj.name}, ${manualProvince}`,
+                        isGPS: false
                     })
                 }
             }

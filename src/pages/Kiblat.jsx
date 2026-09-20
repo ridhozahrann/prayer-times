@@ -44,6 +44,9 @@ const Kiblat = () => {
 
     // Qibla needle rotation (relative to phone top pointer): (QiblaDeg - heading)
     const qiblaRelativeAngle = (qiblaDirection - activeHeading + 360) % 360
+    // Normalized angle difference (-180 to 180) for precision alignment checking
+    const angleDiff = ((qiblaDirection - activeHeading + 540) % 360) - 180
+    const isAligned = Math.abs(angleDiff) < 4
 
     const getAccuracyLabel = (acc) => {
         if (!compassSensorEnabled) return language === 'en' ? 'Manual Mode' : 'Mode Manual'
@@ -76,7 +79,7 @@ const Kiblat = () => {
                 <div className="flex items-center gap-1.5 text-zinc-650 dark:text-zinc-400 bg-white/50 dark:bg-zinc-900/50 px-4 py-2 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/40 text-sm font-semibold shrink-0">
                     <IoLocationOutline className="w-4 h-4 text-emerald-500 animate-pulse" />
                     <span>
-                        {coords.name === 'Lokasi Anda (GPS)' || coords.name === 'Your Location (GPS)'
+                        {coords.isGPS || coords.name === 'Lokasi Anda (GPS)' || coords.name === 'Your Location (GPS)'
                             ? t('lokasiAnda')
                             : coords.name?.split(',')[0]}
                     </span>
@@ -152,13 +155,13 @@ const Kiblat = () => {
                         <div className="absolute top-7 text-[9px] font-bold text-red-500 uppercase tracking-widest z-20">{language === 'en' ? 'FRONT' : 'DEPAN'}</div>
 
                         {/* Glowing active Qibla guide arc */}
-                        {Math.abs(qiblaRelativeAngle) < 5 && (
+                        {isAligned && (
                             <div className="absolute inset-0 rounded-full border-4 border-emerald-500 animate-ping opacity-25 z-0" />
                         )}
 
                         {/* Rotating Outer Dial (Points to Magnetic North) */}
                         <div
-                            className="absolute inset-2 rounded-full border-2 border-zinc-200/60 dark:border-zinc-800/40 bg-zinc-50/50 dark:bg-zinc-950/40 transition-transform duration-300 flex items-center justify-center shadow-inner"
+                            className="absolute inset-2 rounded-full border-2 border-zinc-200/60 dark:border-zinc-800/40 bg-zinc-50/50 dark:bg-zinc-950/40 transition-transform duration-300 ease-out flex items-center justify-center shadow-inner"
                             style={{ transform: `rotate(${-activeHeading}deg)` }}
                         >
                             {/* Compass Cardinal Directions */}
@@ -173,7 +176,7 @@ const Kiblat = () => {
 
                         {/* Rotating Inner Qibla Arrow (Points to Kaaba) */}
                         <div
-                            className="absolute w-24 h-24 md:w-32 md:h-32 transition-transform duration-300 flex items-center justify-center z-10"
+                            className="absolute w-24 h-24 md:w-32 md:h-32 transition-transform duration-300 ease-out flex items-center justify-center z-10"
                             style={{ transform: `rotate(${qiblaRelativeAngle}deg)` }}
                         >
                             {/* Needle pointer */}
@@ -190,7 +193,7 @@ const Kiblat = () => {
 
                     {/* Compass aligned label */}
                     <div className="text-center z-10">
-                        {Math.abs(qiblaRelativeAngle) < 3 ? (
+                        {isAligned ? (
                             <span className="bg-emerald-500 text-white font-extrabold text-xs tracking-wider uppercase px-4 py-1.5 rounded-full shadow-lg shadow-emerald-500/20 animate-bounce">
                                 🟢 {t('qiblaAligned')}
                             </span>

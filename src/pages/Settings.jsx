@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useSettings, CALCULATION_METHODS } from '../context/SettingsContext'
 import { indonesiaRegions } from '../data/indonesiaRegions'
 import { useTheme } from '../context/ThemeContext'
+import { sendNotification } from '../utils/notification'
 import { IoSettingsOutline, IoLocationOutline, IoNotificationsOutline, IoColorPaletteOutline, IoRefreshOutline, IoInformationCircleOutline, IoGlobeOutline } from 'react-icons/io5'
 
 const Settings = () => {
@@ -49,7 +50,7 @@ const Settings = () => {
                 const permission = await Notification.requestPermission()
                 if (permission === 'granted') {
                     setNotificationsEnabled(true)
-                    new Notification(t('notifAllowTitle'), {
+                    sendNotification(t('notifAllowTitle'), {
                         body: t('notifAllowBody'),
                         icon: '/icons/logo.svg'
                     })
@@ -67,7 +68,7 @@ const Settings = () => {
     // Trigger test notification
     const triggerTestNotification = () => {
         if (Notification.permission === 'granted') {
-            new Notification(t('ujiPemberitahuanTitle'), {
+            sendNotification(t('ujiPemberitahuanTitle'), {
                 body: t('ujiPemberitahuanBody'),
                 icon: '/icons/logo.svg'
             })

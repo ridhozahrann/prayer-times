@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import axios from 'axios'
 import { useSettings } from './SettingsContext'
 import { getOfflineHijriDate } from '../utils/prayerHelpers'
+import { sendNotification } from '../utils/notification'
 
 const PrayerContext = createContext()
 
@@ -39,6 +40,8 @@ export const PrayerProvider = ({ children }) => {
         }, 1000)
         return () => clearInterval(timer)
     }, [])
+
+    const currentDateStr = currentTime.toDateString()
 
     // 2. Fetch Timing from Aladhan API
     useEffect(() => {
@@ -124,7 +127,7 @@ export const PrayerProvider = ({ children }) => {
         return () => {
             isMounted = false
         }
-    }, [coords.lat, coords.lng, calculationMethod])
+    }, [coords.lat, coords.lng, calculationMethod, currentDateStr])
 
     // 3. Engine to calculate active, next, countdown, and trigger notifications
     useEffect(() => {
@@ -201,19 +204,17 @@ export const PrayerProvider = ({ children }) => {
                 if (lastNotifiedRef.current !== uniqueNotificationKey) {
                     lastNotifiedRef.current = uniqueNotificationKey
 
-                    if (Notification.permission === 'granted') {
-                        const locationName = coords.name === 'Lokasi Anda (GPS)' || coords.name === 'Your Location (GPS)'
-                            ? t('lokasiAnda')
-                            : coords.name
-                        new Notification(t('waktuAdzanTiba'), {
-                            body: language === 'en'
-                                ? `Time for ${localizedPrayerName} has arrived for ${locationName}.`
-                                : `Waktu ${localizedPrayerName} telah tiba untuk wilayah ${locationName}.`,
-                            icon: '/icons/logo.svg',
-                            tag: 'adzan-notification',
-                            requireInteraction: true
-                        })
-                    }
+                    const locationName = coords.isGPS || coords.name === 'Lokasi Anda (GPS)' || coords.name === 'Your Location (GPS)'
+                        ? t('lokasiAnda')
+                        : coords.name
+                    sendNotification(t('waktuAdzanTiba'), {
+                        body: language === 'en'
+                            ? `Time for ${localizedPrayerName} has arrived for ${locationName}.`
+                            : `Waktu ${localizedPrayerName} telah tiba untuk wilayah ${locationName}.`,
+                        icon: '/icons/logo.svg',
+                        tag: 'adzan-notification',
+                        requireInteraction: true
+                    })
                 }
             }
         }

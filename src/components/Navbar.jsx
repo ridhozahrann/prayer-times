@@ -2,6 +2,7 @@ import React from 'react'
 import { IoSunny, IoMoon, IoLocation, IoNotifications, IoNotificationsOff } from 'react-icons/io5'
 import { useTheme } from '../context/ThemeContext'
 import { useSettings } from '../context/SettingsContext'
+import { sendNotification } from '../utils/notification'
 
 const Navbar = () => {
     const { theme, toggleTheme } = useTheme()
@@ -14,7 +15,7 @@ const Navbar = () => {
                 const permission = await Notification.requestPermission()
                 if (permission === 'granted') {
                     setNotificationsEnabled(true)
-                    new Notification(t('notifActiveTitle'), {
+                    sendNotification(t('notifActiveTitle'), {
                         body: t('notifActiveBody'),
                         icon: '/icons/logo.svg'
                     })
@@ -45,7 +46,11 @@ const Navbar = () => {
             <div className="hidden md:flex items-center gap-2 text-zinc-650 dark:text-zinc-400">
                 <IoLocation className="w-4.5 h-4.5 text-emerald-500 animate-pulse" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-zinc-450 dark:text-zinc-500 mr-1">{t('wilayah')}:</span>
-                <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">{coords.name || t('menentukan')}</span>
+                <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                    {coords.isGPS || coords.name === 'Lokasi Anda (GPS)' || coords.name === 'Your Location (GPS)'
+                        ? t('lokasiAnda')
+                        : coords.name || t('menentukan')}
+                </span>
             </div>
 
             {/* Mobile Location Header */}
