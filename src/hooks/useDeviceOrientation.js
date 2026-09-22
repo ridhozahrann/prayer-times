@@ -56,39 +56,56 @@ export const useDeviceOrientation = (enabled = true) => {
     useEffect(() => {
         if (!permissionGranted || !enabled) return
 
+        let hasReceivedData = false
+
         const handleOrientation = (event) => {
-            // absolute heading is alpha on deviceorientationabsolute, or webkitCompassHeading
             let compassHeading = null
 
-            if (event.webkitCompassHeading) {
+            if (typeof event.webkitCompassHeading === 'number' && !isNaN(event.webkitCompassHeading)) {
                 // iOS supports webkitCompassHeading
                 compassHeading = event.webkitCompassHeading
-                if (event.webkitCompassAccuracy) {
+                if (typeof event.webkitCompassAccuracy === 'number') {
                     setAccuracy(Math.round(event.webkitCompassAccuracy))
                 }
-            } else if (event.alpha !== null) {
-                // Android supports alpha/beta/gamma. With absolute event, standard alpha is 0 at magnetic north.
-                // Wait, alpha is counter-clockwise. Compass heading is clockwise.
-                // So compassHeading = 360 - alpha
-                compassHeading = (360 - event.alpha) % 360
-                setAccuracy(event.absolute ? 10 : 30) // set placeholder accuracy
+            } else if (event.alpha !== null && event.alpha !== undefined) {
+                // Android / standard DeviceOrientation
+                const screenAngle = window.screen?.orientation?.angle || window.orientation || 0
+                compassHeading = (360 - event.alpha + screenAngle) % 360
+                setAccuracy(event.absolute ? 10 : 30) // placeholder accuracy
             }
 
-            if (compassHeading !== null) {
-                setHeading(Math.round(compassHeading))
+            if (compassHeading !== null && !isNaN(compassHeading)) {
+                const normalized = (Math.round(compassHeading) + 360) % 360
+                setHeading(normalized)
+                if (!hasReceivedData) {
+                    hasReceivedData = true
+                    setIsSupported(true)
+                }
             }
         }
 
-        // Attempt to listen to absolute orientation first, then normal orientation
+        // Timeout check: if no orientation events with valid heading received within 1.5s, mark unsupported
+        const timeoutId = setTimeout(() => {
+            if (!hasReceivedData) {
+                setIsSupported(false)
+            }
+        }, 1500)
+
         if ('ondeviceorientationabsolute' in window) {
             window.addEventListener('deviceorientationabsolute', handleOrientation, true)
-            return () =>
-                window.removeEventListener('deviceorientationabsolute', handleOrientation, true)
-        } else if ('ondeviceorientation' in window) {
+        }
+        if ('ondeviceorientation' in window) {
             window.addEventListener('deviceorientation', handleOrientation, true)
-            return () => window.removeEventListener('deviceorientation', handleOrientation, true)
-        } else {
-            setIsSupported(false)
+        }
+
+        return () => {
+            clearTimeout(timeoutId)
+            if ('ondeviceorientationabsolute' in window) {
+                window.removeEventListener('deviceorientationabsolute', handleOrientation, true)
+            }
+            if ('ondeviceorientation' in window) {
+                window.removeEventListener('deviceorientation', handleOrientation, true)
+            }
         }
     }, [permissionGranted, enabled])
 

@@ -204,8 +204,8 @@ const Kiblat = () => {
                         )}
                     </div>
 
-                    {/* Manual test slider (if compass API unsupported, desktop testing, or disabled by user) */}
-                    {(!isSupported || !compassSensorEnabled) && (
+                    {/* Manual test slider (if compass API unsupported, permission not granted, desktop testing, or disabled by user) */}
+                    {(!isSupported || !permissionGranted || !compassSensorEnabled) && (
                         <div className="w-full max-w-sm mt-8 space-y-2 border-t border-zinc-200/50 dark:border-zinc-850/40 pt-4">
                             <div className="flex justify-between text-[11px] font-semibold text-zinc-400 dark:text-zinc-550 uppercase">
                                 <span>{t('simHeadingHeading')}</span>

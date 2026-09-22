@@ -6,6 +6,7 @@ import { PrayerProvider } from './context/PrayerContext'
 import Sidebar from './components/Sidebar'
 import BottomNav from './components/BottomNav'
 import Navbar from './components/Navbar'
+import InstallPrompt from './components/InstallPrompt'
 import Home from './pages/Home'
 import Jadwal from './pages/Jadwal'
 import Kiblat from './pages/Kiblat'
@@ -25,6 +26,7 @@ function App() {
               <div className="flex-1 flex flex-col min-h-screen md:pl-64 min-w-0">
                 {/* Global Top Navbar */}
                 <Navbar />
+                <InstallPrompt />
 
                 {/* Main page scroll body */}
                 <div className="flex-1 overflow-y-auto no-scrollbar">

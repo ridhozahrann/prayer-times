@@ -29,6 +29,7 @@ export const PrayerProvider = ({ children }) => {
     const [nextPrayer, setNextPrayer] = useState(null)
     const [countdown, setCountdown] = useState(0) // seconds remaining
     const [activeRemaining, setActiveRemaining] = useState(0) // seconds active prayer will end in
+    const [totalDuration, setTotalDuration] = useState(1) // total seconds in current interval
 
     // Ref to store last triggered notification prayer to avoid duplicates
     const lastNotifiedRef = useRef('')
@@ -154,10 +155,12 @@ export const PrayerProvider = ({ children }) => {
             setActivePrayer(activeSlot.key)
             setNextPrayer(nextSlot.key)
 
-            // Seconds remaining to the next milestone
+            // Seconds remaining to the next milestone & total window duration
             const timeRemaining = Math.max(0, Math.floor((nextSlot.time - now) / 1000))
+            const totalSecs = Math.max(1, Math.floor((nextSlot.time - activeSlot.time) / 1000))
             setCountdown(timeRemaining)
             setActiveRemaining(timeRemaining)
+            setTotalDuration(totalSecs)
 
             // 4. Trigger browser notification.
             if (timeRemaining <= 1 && nextSlot.key !== 'Sunrise' && notificationsEnabled) {
@@ -206,6 +209,7 @@ export const PrayerProvider = ({ children }) => {
                 nextPrayer,
                 countdown,
                 activeRemaining,
+                totalDuration,
                 prayerNames: PRAYER_NAMES
             }}
         >

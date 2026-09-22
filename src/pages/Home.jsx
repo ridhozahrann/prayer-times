@@ -16,6 +16,7 @@ const Home = () => {
         activePrayer,
         nextPrayer,
         countdown,
+        totalDuration,
         prayerNames
     } = usePrayer()
 
@@ -119,7 +120,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* 2. Primary Next Prayer Card with Realtime Countdown */}
+            {/* 2. Primary Next Prayer Card with Realtime Countdown & Circular Progress Ring */}
             <section className="glass-card rounded-3xl p-6 md:p-8 border border-zinc-200/50 dark:border-zinc-800/40 shadow-lg relative overflow-hidden bg-white/70 dark:bg-zinc-900/50">
                 <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6 z-10">
                     <div>
@@ -147,12 +148,52 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <div className="bg-zinc-100/80 dark:bg-zinc-800/50 dark:border-zinc-700/35 border border-zinc-200/40 p-4 md:px-6 md:py-4 rounded-2xl flex flex-col items-center md:items-end justify-center shrink-0">
-                        <span className="text-[10px] md:text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-1">
-                            {language === 'en' ? `Time to ${nextPrayerName}` : `Menuju ${nextPrayerName}`}
-                        </span>
-                        <div className="font-display text-2xl md:text-3xl font-black text-emerald-600 dark:text-emerald-400 tracking-wide">
-                            {formatCountdown(countdown)}
+                    {/* Circular Progress Ring + Countdown */}
+                    <div className="flex flex-col items-center justify-center shrink-0">
+                        <div className="relative w-28 h-28 md:w-32 md:h-32 flex items-center justify-center">
+                            {(() => {
+                                const radius = 46
+                                const circumference = 2 * Math.PI * radius
+                                const percent = Math.min(100, Math.max(0, ((totalDuration - countdown) / totalDuration) * 100))
+                                const dashoffset = circumference - (percent / 100) * circumference
+                                return (
+                                    <>
+                                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                            {/* Track Ring */}
+                                            <circle
+                                                cx="50"
+                                                cy="50"
+                                                r={radius}
+                                                className="text-zinc-200 dark:text-zinc-800"
+                                                strokeWidth="7"
+                                                stroke="currentColor"
+                                                fill="transparent"
+                                            />
+                                            {/* Active Progress Ring */}
+                                            <circle
+                                                cx="50"
+                                                cy="50"
+                                                r={radius}
+                                                className="text-emerald-500 transition-all duration-1000 ease-linear"
+                                                strokeWidth="7"
+                                                strokeDasharray={circumference}
+                                                strokeDashoffset={dashoffset}
+                                                strokeLinecap="round"
+                                                stroke="currentColor"
+                                                fill="transparent"
+                                            />
+                                        </svg>
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                                            <span className="text-[9px] md:text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                                                {language === 'en' ? `To ${nextPrayerName}` : `Menuju ${nextPrayerName}`}
+                                            </span>
+                                            <span className="font-display text-base md:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight leading-none mt-0.5">
+                                                {formatCountdown(countdown)}
+                                            </span>
+                                        </div>
+                                    </>
+                                )
+                            })()}
                         </div>
                     </div>
                 </div>
